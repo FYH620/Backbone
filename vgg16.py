@@ -1,4 +1,5 @@
 from torch import nn
+from torch.nn import functional as F
 
 class VGG16(nn.Module):
     def __init__(self,num_classes):
@@ -33,4 +34,5 @@ class VGG16(nn.Module):
         x=self.features(x)
         x=x.view(x.size(0),-1)
         x=self.classifier(x)
+        x=F.softmax(x,dim=1)
         return x
