@@ -2,7 +2,6 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 from math import floor
-from torchsummary import summary
 
 class BottleNeck(nn.Module):
     def __init__(self,in_dims,growth_rate):
@@ -51,36 +50,35 @@ class DenseNet(nn.Module):
 
         self.conv1=nn.Conv2d(3,self.out_dims,kernel_size=7,stride=2,padding=3,bias=False)
         self.bn1=nn.BatchNorm2d(self.out_dims)
-        self.pool1=nn.MaxPool2d(kernel_size=3,stride=2,padding=1)
+        self.maxpool=nn.MaxPool2d(kernel_size=3,stride=2,padding=1)
 
-        self.denseblock1,self.transition1=self._make_denseblock_and_transition(0)
-        self.denseblock2,self.transition2=self._make_denseblock_and_transition(1)
-        self.denseblock3,self.transition3=self._make_denseblock_and_transition(2)
-
-        self.denseblock4=DenseBlock(in_dims=self.out_dims,growth_rate=self.growth_rate,\
-            bottleneck_num=self.bottleneck_num_list[3])
-        self.out_dims+=(self.growth_rate*self.bottleneck_num_list[3])
+        self.denseblock1,self.transition1=self._make_denseblock_and_transition(0,with_transition=True)
+        self.denseblock2,self.transition2=self._make_denseblock_and_transition(1,with_transition=True)
+        self.denseblock3,self.transition3=self._make_denseblock_and_transition(2,with_transition=True)
+        self.denseblock4=self._make_denseblock_and_transition(index=3,with_transition=False)
 
         self.bn2=nn.BatchNorm2d(self.out_dims)
         self.avgpool=nn.AdaptiveAvgPool2d(output_size=1)
         self.fc=nn.Linear(in_features=self.out_dims,out_features=self.num_classes)
 
-    def _make_denseblock_and_transition(self,index):
+    def _make_denseblock_and_transition(self,index,with_transition=True):
 
         denseblock=DenseBlock(in_dims=self.out_dims,growth_rate=self.growth_rate,\
             bottleneck_num=self.bottleneck_num_list[index])
         self.out_dims+=(self.growth_rate*self.bottleneck_num_list[index])
 
-        transition_out_dims=int(floor(self.out_dims*0.5))
-        transition=Transition(in_dims=self.out_dims,out_dims=transition_out_dims)
-        self.out_dims=transition_out_dims
+        if with_transition:
+            transition_out_dims=int(floor(self.out_dims*0.5))
+            transition=Transition(in_dims=self.out_dims,out_dims=transition_out_dims)
+            self.out_dims=transition_out_dims
+            return denseblock,transition
 
-        return denseblock,transition
+        return denseblock
     
     def forward(self,x):
         x=self.conv1(x)
         x=self.bn1(x)
-        x=self.pool1(x)
+        x=self.maxpool(x)
         x=self.denseblock1(x)
         x=self.transition1(x)
         x=self.denseblock2(x)
@@ -95,5 +93,4 @@ class DenseNet(nn.Module):
         x=F.softmax(x)
         return x
 
-densenet121=DenseNet(growth_rate=32,bottleneck_num_list=[6,12,24,16],num_classes=1000)
-print(summary(densenet121,input_size=(3,224,224)))
+#densenet121=DenseNet(growth_rate=32,bottleneck_num_list=[6,12,24,16],num_classes=1000)
