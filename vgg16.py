@@ -36,3 +36,5 @@ class VGG16(nn.Module):
         x=self.classifier(x)
         x=F.softmax(x,dim=1)
         return x
+
+#vgg16=VGG16(num_classes=1000)

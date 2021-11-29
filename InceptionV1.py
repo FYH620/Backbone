@@ -102,3 +102,5 @@ class InceptionV1(nn.Module):
         x=self.classifier(x)
         x=F.softmax(x,dim=1)
         return x
+
+#googlenet=InceptionV1(num_classes=1000)

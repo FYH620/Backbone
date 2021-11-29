@@ -50,4 +50,5 @@ class AlexNet(nn.Module):
             elif isinstance(m, nn.Linear):
                 nn.init.normal_(m.weight, 0, 0.01)
                 nn.init.constant_(m.bias, 0)
-                
+
+#alexnet=AlexNet(num_classes=1000,init_weights=True)
