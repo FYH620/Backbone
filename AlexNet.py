@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch
+import torch.nn.functional as F
 
 class AlexNet(nn.Module):
 
@@ -37,6 +38,7 @@ class AlexNet(nn.Module):
         x = self.features(x)
         x = torch.flatten(x, start_dim=1)
         x = self.classifier(x)
+        x = F.softmax(x,dim=1)
         return x
 
     def _initialize_weights(self):

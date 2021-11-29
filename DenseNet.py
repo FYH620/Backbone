@@ -90,7 +90,7 @@ class DenseNet(nn.Module):
         x=self.avgpool(x)
         x=x.view(x.shape[0],-1)
         x=self.fc(x)
-        x=F.softmax(x)
+        x=F.softmax(x,dim=1)
         return x
 
 #densenet121=DenseNet(growth_rate=32,bottleneck_num_list=[6,12,24,16],num_classes=1000)

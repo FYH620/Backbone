@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+import torch.nn.functional as F
 
 class LRN(nn.Module):
     def __init__(self,k=2,alpha=0.0001,beta=0.75,local_size=5):
@@ -99,4 +100,5 @@ class InceptionV1(nn.Module):
         x=x.view(x.shape[0], -1)
         x=self.dropout(x)
         x=self.classifier(x)
+        x=F.softmax(x,dim=1)
         return x
