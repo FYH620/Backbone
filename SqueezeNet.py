@@ -35,9 +35,9 @@ class SqueezeNet(nn.Module):
         self.fire7=Fire(in_planes=384,squeeze_planes=48,expand_planes=192)
         self.fire8=Fire(in_planes=384,squeeze_planes=64,expand_planes=256)
         self.maxpool3=nn.MaxPool2d(kernel_size=3,stride=2,padding=1)
-        self.fire9=Fire(in_planes=512,squeeze_planes=int(num_classes/8),expand_planes=int(num_classes/2))
+        self.fire9=Fire(in_planes=512,squeeze_planes=64,expand_planes=256)
         self.dropout=nn.Dropout(p=0.5)
-        self.conv10=nn.Conv2d(num_classes,num_classes,kernel_size=1,stride=1,padding=0)
+        self.conv10=nn.Conv2d(512,num_classes,kernel_size=1,stride=1,padding=0)
         self.bn10=nn.BatchNorm2d(num_classes)
         self.gap=nn.AdaptiveAvgPool2d(output_size=1)
 
