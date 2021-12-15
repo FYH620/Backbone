@@ -1,7 +1,6 @@
 import torch
 import torch.nn.functional as F
 from torch import nn
-from torchsummary import summary
 
 class Fire(nn.Module):
     def __init__(self,in_planes,squeeze_planes,expand_planes):
@@ -60,5 +59,4 @@ class SqueezeNet(nn.Module):
         x=x.view(x.size(0),-1)
         return F.softmax(x,dim=1)
 
-squeezenet=SqueezeNet(num_classes=1000)
-print(summary(squeezenet,input_size=(3,224,224)))
+# squeezenet=SqueezeNet(num_classes=1000)
