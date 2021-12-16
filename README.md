@@ -71,6 +71,28 @@
 
 ![](https://cdn.jsdelivr.net/gh/FYH620/PicGo-Use/imgs/detnet4.png)
 
+#### SqueezeNet  ![](https://img.shields.io/badge/%E8%BD%BB%E9%87%8F%E5%8C%96-SqueezeNet-success)
+
+- 使用 **1*1 卷积**代替 3\*3 卷积，降低参数量；同时**降低通道数**从而降低后续 3\*3 卷积的运算量与参数量
+- Squeeze 后使用**多个尺寸的卷积**核进行运算，保留一定的特征信息
+
+#### MobileNet  ![](https://img.shields.io/badge/%E8%BD%BB%E9%87%8F%E5%8C%96-MobileNet-green)
+
+##### MobileNetV1
+
+- 将卷积分解为逐通道卷积与逐点卷积两步，提出了**深度可分离卷积**，降低了运算量
+- 使用 ReLU6 作为激活函数，满足了移动端**低精度部署**时的要求，防止输出过大数字无法被覆盖
+
+##### MobileNetV2
+
+- 第一代网络中**各通道特征独立**，加之 ReLU 激活函数，使很多卷积核参数稀疏，梯度更新为 0，学习效果差
+- 第二代提出了**反残差模块**，利用了残差网络的基础进行改进，与 ResNet 不同的是其 1*1 卷积进行升维而非降维，这是由于后续的 3\*3 卷积采用了深度可分离卷积，可以减少运算量
+- 最终进行逐点相加时**去除了 ReLU6 激活函数**，防止特征被破坏
+
+#### ShuffleNet  ![](https://img.shields.io/badge/%E8%BD%BB%E9%87%8F%E5%8C%96-ShuffleNet-orange)
+
+- 提出了优越的**通道混洗**技术，加强了组卷积过程中的信息流通，增强了特征的表达能力
+
 ### Blog
 
 [CVWorld-专注CV领域技术分享](http://cvworld.top/index.php/category/paper-and-code/)
