@@ -154,4 +154,4 @@ def Resnet50(num_classes=1000):
     model=ResNet(ConvBottleneck,IdentityBottleneck,num_classes)
     return model
 
-#resnet50=Resnet50(num_classes=1000)
+# resnet50=Resnet50(num_classes=1000)
